@@ -193,6 +193,20 @@ namespace StudentExercise4Advanced.Data
         //====================================================================================
         //Cohort
         //====================================================================================
+        public void AddCohort(string userInput)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"INSERT INTO Cohort (CohortName) VALUES (@cohortName)";
+                    cmd.Parameters.Add(new SqlParameter("@cohortName", userInput));
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
         public List<Cohort> GetallCohorts()
         {
             using (SqlConnection conn = Connection)

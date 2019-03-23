@@ -100,6 +100,16 @@ namespace StudentExercise4Advanced
                             Console.WriteLine($"{stu.FirstName} {stu.LastName} SlackHandle: {stu.SlackHandle}");
                         }
                         break;
+                    case "6":
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        Console.WriteLine("What would you like to name the Cohort?");
+                        string newCohortName = Console.ReadLine();
+                        repository.AddCohort(newCohortName);
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        Console.WriteLine("Cohort added.");
+                        break;
                     default:
                         Console.WriteLine("Goodbye");
                         break;
