@@ -88,6 +88,18 @@ namespace StudentExercise4Advanced
                             Console.WriteLine($"{cohortCounter}: {cohort.Name}");
                         }
                         break;
+                    case "5":
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        List<Student> studentByLast = repository.StudentSearchByLast();
+                        foreach (Student stu in studentByLast)
+                        {
+                            Console.WriteLine();
+                            Console.WriteLine();
+                            Console.WriteLine("Student search complete----------------------");
+                            Console.WriteLine($"{stu.FirstName} {stu.LastName} SlackHandle: {stu.SlackHandle}");
+                        }
+                        break;
                     default:
                         Console.WriteLine("Goodbye");
                         break;
