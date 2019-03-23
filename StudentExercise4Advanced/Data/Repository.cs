@@ -112,6 +112,47 @@ namespace StudentExercise4Advanced.Data
 
         //STUDENTS
 
+        public List<Student> StudentSearchByLast()
+        {
+            Console.WriteLine("What is the students last name?");
+            string userInput = Console.ReadLine();
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "SELECT FirstName, LastName, SlackHandle FROM Student WHERE LastName = @lastName";
+                    cmd.Parameters.Add(new SqlParameter("@lastName", userInput));
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    List<Student> students = new List<Student>();
+
+                    while (reader.Read())
+                    {
+                        int stuFirstNameColumnPosition = reader.GetOrdinal("FirstName");
+                        string stuFirstNameValue = reader.GetString(stuFirstNameColumnPosition);
+
+                        int stuLastNameColumnPosition = reader.GetOrdinal("LastName");
+                        string stuLastNameValue = reader.GetString(stuLastNameColumnPosition);
+
+                        int stuSlackNameColumnPosition = reader.GetOrdinal("SlackHandle");
+                        string stuSlackNameValue = reader.GetString(stuSlackNameColumnPosition);
+
+                        Student student = new Student
+                        {
+                            FirstName = stuFirstNameValue,
+                            LastName = stuLastNameValue,
+                            SlackHandle = stuSlackNameValue
+                        };
+
+                        students.Add(student);
+                    }
+                    reader.Close();
+                    return students;
+                }
+            }
+        }
+
         public List<Student> GetAllStudentsBasic()
         {
             using (SqlConnection conn = Connection)
@@ -152,6 +193,20 @@ namespace StudentExercise4Advanced.Data
         //====================================================================================
         //Cohort
         //====================================================================================
+        public void AddCohort(string userInput)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"INSERT INTO Cohort (CohortName) VALUES (@cohortName)";
+                    cmd.Parameters.Add(new SqlParameter("@cohortName", userInput));
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
         public List<Cohort> GetallCohorts()
         {
             using (SqlConnection conn = Connection)

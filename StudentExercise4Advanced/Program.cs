@@ -88,6 +88,43 @@ namespace StudentExercise4Advanced
                             Console.WriteLine($"{cohortCounter}: {cohort.Name}");
                         }
                         break;
+                    case "5":
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        List<Student> studentByLast = repository.StudentSearchByLast();
+                        foreach (Student stu in studentByLast)
+                        {
+                            Console.WriteLine();
+                            Console.WriteLine();
+                            Console.WriteLine("Student search complete----------------------");
+                            Console.WriteLine($"{stu.FirstName} {stu.LastName} SlackHandle: {stu.SlackHandle}");
+                        }
+                        break;
+                    case "6":
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        Console.WriteLine("What would you like to name the Cohort?");
+                        string newCohortName = Console.ReadLine();
+                        repository.AddCohort(newCohortName);
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        Console.WriteLine("Cohort added.");
+                        break;
+                    case "7":
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        Console.WriteLine("What is the first name of the new student?");
+                        string newStudentFirstName = Console.ReadLine();
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        Console.WriteLine("What is the last name of the new student?");
+                        string newStudentLastName = Console.ReadLine();
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        Console.WriteLine("What is the slack handle for this new student?");
+                        string newStudentSlackHandle= Console.ReadLine();
+
+                        break;
                     default:
                         Console.WriteLine("Goodbye");
                         break;
