@@ -110,6 +110,21 @@ namespace StudentExercise4Advanced
                         Console.WriteLine();
                         Console.WriteLine("Cohort added.");
                         break;
+                    case "7":
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        Console.WriteLine("What is the first name of the new student?");
+                        string newStudentFirstName = Console.ReadLine();
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        Console.WriteLine("What is the last name of the new student?");
+                        string newStudentLastName = Console.ReadLine();
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        Console.WriteLine("What is the slack handle for this new student?");
+                        string newStudentSlackHandle= Console.ReadLine();
+
+                        break;
                     default:
                         Console.WriteLine("Goodbye");
                         break;
