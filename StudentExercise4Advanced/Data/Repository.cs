@@ -22,6 +22,22 @@ namespace StudentExercise4Advanced.Data
 
         //EXERCISES
 
+        public void AssignExerciseToStudent(Student student, Exercise exercise)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"INSERT INTO AssignedExercise (ExerciseId, StudentId) VALUES (@exerciseId, @studentId)";
+                    cmd.Parameters.Add(new SqlParameter("@exerciseId", exercise.Id));
+                    cmd.Parameters.Add(new SqlParameter("@studentId", student.Id));
+                    cmd.ExecuteNonQuery();
+
+                }
+            }
+        }
+
         public List<Exercise> GetAllExercises()
         {
             using (SqlConnection conn = Connection)

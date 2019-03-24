@@ -10,7 +10,8 @@ namespace StudentExercise4Advanced
     {
         static void Main(string[] args)
         {
-            while (true)
+            bool sweetApp = true;
+            while (sweetApp)
             {
                 Console.WriteLine();
                 Console.WriteLine();
@@ -27,8 +28,8 @@ namespace StudentExercise4Advanced
                 Console.WriteLine("9. Display students by Cohort.");
                 Console.WriteLine("10. Move existing student to new cohort.");
                 Console.WriteLine("11. List specific students exercises.");
-                Console.WriteLine("11. Assign specific student specific exercise.");
-                Console.WriteLine("12. Exit.");
+                Console.WriteLine("12. Assign specific student specific exercise.");
+                Console.WriteLine("13. Exit.");
                 Console.WriteLine();
                 Console.WriteLine();
 
@@ -265,8 +266,63 @@ namespace StudentExercise4Advanced
                         Console.WriteLine();
                         Console.WriteLine();
                         break;
+                    case "12":
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        Console.WriteLine("Choose a Student to see their exercises");
+                        List<Student> chooseAStudentForAssigningEX = repository.GetAllStudentsBasic();
+                        Console.WriteLine($"Select student by entering 1 - {chooseAStudentForAssigningEX.Count} ");
+                        int chooseAStudentForAssigningExCounter = 0;
+                        foreach (Student student in chooseAStudentForAssigningEX)
+                        {
+                            ++chooseAStudentForAssigningExCounter;
+                            Console.WriteLine($"{chooseAStudentForAssigningExCounter}: {student.FirstName} {student.LastName}");
+                        }
+                        int theeChosenStudentForAssigningEx = Int32.Parse(Console.ReadLine());
+
+                        List<Exercise> chosenStudentsForAssigningExercises = repository.QueStudentExercises(theeChosenStudentForAssigningEx);
+                        int chosenStuExToAssignCounter = 0;
+                        Console.WriteLine($"{chooseAStudentForAssigningEX[--theeChosenStudentForAssigningEx].FirstName} is currently working on:");
+                        foreach (Exercise ex in chosenStudentsForAssigningExercises)
+                        {
+                            ++chosenStuExToAssignCounter;
+                            Console.WriteLine($"{chosenStuExToAssignCounter}: {ex.Name} ");
+                        }
+
+                        Console.WriteLine();
+                        Console.WriteLine();
+
+                        List<Exercise> exercisesAvailable = repository.GetAllExercises();
+                        int exerciseAssignCounter = 0;
+                        foreach (Exercise assignment in exercisesAvailable)
+                        {
+                            ++exerciseAssignCounter;
+                            if (!chosenStudentsForAssigningExercises.Exists(ex => ex.Id == assignment.Id))
+                            {
+                                Console.WriteLine($"{assignment.Name} can not be assigned");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"{assignment.Name} can be assigned");
+                            }
+                        }
+
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        break;
+                    case "13":
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        Console.WriteLine("Goodbye");
+                        sweetApp = false;
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        break;
                     default:
                         Console.WriteLine("Goodbye");
+                        sweetApp = false;
                         break;
                 }
                 
