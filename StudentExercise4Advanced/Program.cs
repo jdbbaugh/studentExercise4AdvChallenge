@@ -144,6 +144,9 @@ namespace StudentExercise4Advanced
                             SlackHandle = newStudentSlackHandle,
                             CohortNumber = cohortsToChoose[--chosenCohort]
                         };
+
+                        repository.AddStudent(newStudentToBeAdded);
+
                         Console.WriteLine($"{newStudentToBeAdded.FirstName} is now in {cohortsToChoose[chosenCohort].Name}");
 
 
