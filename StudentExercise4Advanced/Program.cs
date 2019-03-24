@@ -188,8 +188,30 @@ namespace StudentExercise4Advanced
                         repository.AddInstructor(newInstructorToBeAdded);
 
                         Console.WriteLine($"{newInstructorToBeAdded.FirstName} is now teaching {instructorCohortsToChoose[instructorChosenCohort].Name}");
-
-
+                        
+                        break;
+                    case "9":
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        List<Cohort> chooseACohort = repository.GetallCohorts();
+                        Console.WriteLine($"Select Cohort by entering 1 - {chooseACohort.Count} ---------------------");
+                        int choosingCohortOptionCounter = 0;
+                        foreach (Cohort cohort in chooseACohort)
+                        {
+                            ++choosingCohortOptionCounter;
+                            Console.WriteLine($"{choosingCohortOptionCounter}: {cohort.Name}");
+                        }
+                        int theeChosenCohort = Int32.Parse(Console.ReadLine());
+                        List<Student> studentsInCohort = repository.StudentByCohort(theeChosenCohort);
+                        Console.WriteLine();
+                        int cohortStudentCounter = 0;
+                        Console.WriteLine($"{chooseACohort[--theeChosenCohort].Name} Students:");
+                        foreach (Student student in studentsInCohort)
+                        {
+                            ++cohortStudentCounter;
+                            Console.WriteLine($"{cohortStudentCounter}: {student.FirstName} {student.LastName}");
+                        }
+                        Console.WriteLine();
                         break;
                     default:
                         Console.WriteLine("Goodbye");
