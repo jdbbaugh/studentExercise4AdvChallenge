@@ -213,6 +213,32 @@ namespace StudentExercise4Advanced
                         }
                         Console.WriteLine();
                         break;
+                    case "10":
+                        Console.WriteLine();
+                        List<Student> chooseAStudent = repository.GetAllStudentsBasic();
+                        Console.WriteLine($"Select student by entering 1 - {chooseAStudent.Count} ");
+                        int chooseAStudentCounter = 0;
+                        foreach (Student student in chooseAStudent)
+                        {
+                            ++chooseAStudentCounter;
+                            Console.WriteLine($"{chooseAStudentCounter}: {student.FirstName} {student.LastName}");
+                        }
+                        int theeChosenStudent = Int32.Parse(Console.ReadLine());
+
+                        List<Cohort> chooseANewCohort = repository.GetallCohorts();
+                        Console.WriteLine($"Select their new Cohort by entering 1 - {chooseANewCohort.Count} ---------------------");
+                        int choosingNewCohortOptionCounter = 0;
+                        foreach (Cohort cohort in chooseANewCohort)
+                        {
+                            ++choosingNewCohortOptionCounter;
+                            Console.WriteLine($"{choosingNewCohortOptionCounter}: {cohort.Name}");
+                        }
+                        int theeChosenNewCohort = Int32.Parse(Console.ReadLine());
+                        repository.ChangeStudentCohort(theeChosenStudent, theeChosenNewCohort);
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        Console.WriteLine($"{chooseAStudent[--theeChosenStudent].FirstName} has been moved to {chooseANewCohort[--theeChosenNewCohort].Name}");
+                        break;
                     default:
                         Console.WriteLine("Goodbye");
                         break;

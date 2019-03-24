@@ -130,6 +130,21 @@ namespace StudentExercise4Advanced.Data
 
         //STUDENTS
 
+        public void ChangeStudentCohort(int stuId, int CoId)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"UPDATE Student SET CohortId = @newCohortId WHERE Id = @studentId";
+                    cmd.Parameters.Add(new SqlParameter("@newCohortId", CoId));
+                    cmd.Parameters.Add(new SqlParameter("@studentId", stuId));
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
         public void AddStudent(Student newStudent)
         {
             using (SqlConnection conn = Connection)
