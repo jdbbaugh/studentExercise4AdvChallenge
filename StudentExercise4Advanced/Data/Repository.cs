@@ -146,6 +146,21 @@ namespace StudentExercise4Advanced.Data
 
         //STUDENTS
 
+        public void FinallyAssignEx(int exercise, int student)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "INSERT INTO AssignedExercise (ExerciseId, StudentId) VALUES (@exerciseId, @studentId)";
+                    cmd.Parameters.Add(new SqlParameter("@exerciseId", exercise));
+                    cmd.Parameters.Add(new SqlParameter("@studentId", student));
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
         public List<Exercise> QueStudentExercises(int stuId)
         {
             using (SqlConnection conn = Connection)
@@ -161,6 +176,10 @@ namespace StudentExercise4Advanced.Data
 
                     while (reader.Read())
                     {
+
+                        int idColumnPosition = reader.GetOrdinal("ExerciseId");
+                        int exIdValue = reader.GetInt32(idColumnPosition);
+
                         int exNameColumnPosition = reader.GetOrdinal("ExerciseName");
                         string exNameValue = reader.GetString(exNameColumnPosition);
 
@@ -169,6 +188,7 @@ namespace StudentExercise4Advanced.Data
 
                         Exercise exercise = new Exercise
                         {
+                            Id = exIdValue,
                             Name = exNameValue,
                             CodeLanguage = exLanguageNameValue
                         };
@@ -302,13 +322,16 @@ namespace StudentExercise4Advanced.Data
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT FirstName, LastName, SlackHandle FROM Student";
+                    cmd.CommandText = "SELECT Id, FirstName, LastName, SlackHandle FROM Student";
                     SqlDataReader reader = cmd.ExecuteReader();
 
                     List<Student> students = new List<Student>();
 
                     while (reader.Read())
                     {
+                        int idColumnPosition = reader.GetOrdinal("Id");
+                        int idValue = reader.GetInt32(idColumnPosition);
+
                         int firstNameColumnPosition = reader.GetOrdinal("FirstName");
                         string firstNameValue = reader.GetString(firstNameColumnPosition);
 
@@ -320,6 +343,7 @@ namespace StudentExercise4Advanced.Data
 
                         Student student = new Student
                         {
+                            Id = idValue,
                             FirstName = firstNameValue,
                             LastName = lastNameValue,
                             SlackHandle = slackHandleValue,

@@ -271,9 +271,10 @@ namespace StudentExercise4Advanced
                         Console.WriteLine();
                         Console.WriteLine();
                         Console.WriteLine();
-                        Console.WriteLine("Choose a Student to see their exercises");
+                        Console.WriteLine("Choose the student you'd like to assign an exercise to");
                         List<Student> chooseAStudentForAssigningEX = repository.GetAllStudentsBasic();
                         Console.WriteLine($"Select student by entering 1 - {chooseAStudentForAssigningEX.Count} ");
+
                         int chooseAStudentForAssigningExCounter = 0;
                         foreach (Student student in chooseAStudentForAssigningEX)
                         {
@@ -282,35 +283,52 @@ namespace StudentExercise4Advanced
                         }
                         int theeChosenStudentForAssigningEx = Int32.Parse(Console.ReadLine());
 
-                        List<Exercise> chosenStudentsForAssigningExercises = repository.QueStudentExercises(theeChosenStudentForAssigningEx);
-                        int chosenStuExToAssignCounter = 0;
-                        Console.WriteLine($"{chooseAStudentForAssigningEX[--theeChosenStudentForAssigningEx].FirstName} is currently working on:");
-                        foreach (Exercise ex in chosenStudentsForAssigningExercises)
+                        List<Exercise> chosenStudentsAlreadyAssignedExercises = repository.QueStudentExercises(theeChosenStudentForAssigningEx);
+                        List<Exercise> allPossibleExercises = repository.GetAllExercises();
+                        List<Exercise> unassignedExercises = new List<Exercise>();
+
+
+
+                        Console.WriteLine($"You've chosen {chooseAStudentForAssigningEX[--theeChosenStudentForAssigningEx].FirstName} {chooseAStudentForAssigningEX[theeChosenStudentForAssigningEx].LastName}");
+                        Console.WriteLine("Who's already been assigned:");
+                        foreach (Exercise ex in chosenStudentsAlreadyAssignedExercises)
                         {
-                            ++chosenStuExToAssignCounter;
-                            Console.WriteLine($"{chosenStuExToAssignCounter}: {ex.Name} ");
+                            Console.WriteLine(ex.Name);
                         }
 
                         Console.WriteLine();
                         Console.WriteLine();
+                        Console.WriteLine("But not:");
+                        List<int> list1 = new List<int>();
+                        List<int> list2 = new List<int>();
 
-                        List<Exercise> exercisesAvailable = repository.GetAllExercises();
-                        int exerciseAssignCounter = 0;
-                        foreach (Exercise assignment in exercisesAvailable)
+                        foreach (Exercise exNum in allPossibleExercises)
                         {
-                            ++exerciseAssignCounter;
-                            if (!chosenStudentsForAssigningExercises.Exists(ex => ex.Id == assignment.Id))
-                            {
-                                Console.WriteLine($"{assignment.Name} can not be assigned");
-                            }
-                            else
-                            {
-                                Console.WriteLine($"{assignment.Name} can be assigned");
-                            }
+                            list1.Add(exNum.Id);
                         }
 
-                        Console.WriteLine();
-                        Console.WriteLine();
+                        foreach (Exercise exIn in chosenStudentsAlreadyAssignedExercises)
+                        {
+                            list2.Add(exIn.Id);
+                        }
+
+                        List<int> list3 = list1.Except(list2).ToList();
+
+                        Console.WriteLine($"{chooseAStudentForAssigningEX[theeChosenStudentForAssigningEx].FirstName} {chooseAStudentForAssigningEX[theeChosenStudentForAssigningEx].Id}");
+                        Console.WriteLine("Input Exercise Id to assign it to student");
+                        foreach (Exercise num in allPossibleExercises)
+                        {
+                            if (!chosenStudentsAlreadyAssignedExercises.Exists(x => x.Id == num.Id))
+                            {
+                                Console.WriteLine($"{num.Id}: {num.Name}");
+                            }
+                            
+                        }
+
+                       int flipinEx = Int32.Parse(Console.ReadLine());
+
+                        repository.FinallyAssignEx(flipinEx, chooseAStudentForAssigningEX[theeChosenStudentForAssigningEx].Id);
+
                         break;
                     case "13":
                         Console.WriteLine();
