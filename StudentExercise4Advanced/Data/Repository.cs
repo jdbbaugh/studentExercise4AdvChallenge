@@ -61,6 +61,24 @@ namespace StudentExercise4Advanced.Data
 
         //INSTRUCTORS 
 
+        public void AddInstructor(Instructor newInstructor)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"INSERT INTO Instructor (FirstName, LastName, SlackHandle, CohortId) VALUES (@firstName, @lastName, @slackHandle, @cohortId)";
+                    cmd.Parameters.Add(new SqlParameter("@firstName", newInstructor.FirstName));
+                    cmd.Parameters.Add(new SqlParameter("@lastName", newInstructor.LastName));
+                    cmd.Parameters.Add(new SqlParameter("@slackHandle", newInstructor.SlackHandle));
+                    cmd.Parameters.Add(new SqlParameter("@cohortId", newInstructor.CohortNumber.Id));
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
+        }
+
         public List<Instructor> GetAllInstructors()
         {
             using (SqlConnection conn = Connection)

@@ -148,6 +148,46 @@ namespace StudentExercise4Advanced
                         repository.AddStudent(newStudentToBeAdded);
 
                         Console.WriteLine($"{newStudentToBeAdded.FirstName} is now in {cohortsToChoose[chosenCohort].Name}");
+                        
+                        break;
+                    case "8":
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        Console.WriteLine("What is the first name of the new instructor?");
+                        string newInstructorFirstName = Console.ReadLine();
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        Console.WriteLine("What is the last name of the new instructor?");
+                        string newInstructorLastName = Console.ReadLine();
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        Console.WriteLine("What is the slack handle for this new instructor?");
+                        string newInstructorSlackHandle = Console.ReadLine();
+
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        List<Cohort> instructorCohortsToChoose = repository.GetallCohorts();
+                        Console.WriteLine($"Select Cohort by entering 1 - {instructorCohortsToChoose.Count} ---------------------");
+                        int instructorCohortOptionCounter = 0;
+                        foreach (Cohort cohort in instructorCohortsToChoose)
+                        {
+                            ++instructorCohortOptionCounter;
+                            Console.WriteLine($"{instructorCohortOptionCounter}: {cohort.Name}");
+                        }
+
+                        int instructorChosenCohort = Int32.Parse(Console.ReadLine());
+
+                        Instructor newInstructorToBeAdded = new Instructor
+                        {
+                            FirstName = newInstructorFirstName,
+                            LastName = newInstructorLastName,
+                            SlackHandle = newInstructorSlackHandle,
+                            CohortNumber = instructorCohortsToChoose[--instructorChosenCohort]
+                        };
+
+                        repository.AddInstructor(newInstructorToBeAdded);
+
+                        Console.WriteLine($"{newInstructorToBeAdded.FirstName} is now teaching {instructorCohortsToChoose[instructorChosenCohort].Name}");
 
 
                         break;

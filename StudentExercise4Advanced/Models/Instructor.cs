@@ -21,6 +21,11 @@ namespace StudentExercises4.Models
             CohortNumber = cohort;
         }
 
+        public Instructor()
+        {
+
+        }
+
         public void AssignExercise(Exercise exercise)
         {
 
