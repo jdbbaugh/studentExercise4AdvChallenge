@@ -22,6 +22,22 @@ namespace StudentExercise4Advanced.Data
 
         //EXERCISES
 
+        public void AssignExerciseToStudent(Student student, Exercise exercise)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"INSERT INTO AssignedExercise (ExerciseId, StudentId) VALUES (@exerciseId, @studentId)";
+                    cmd.Parameters.Add(new SqlParameter("@exerciseId", exercise.Id));
+                    cmd.Parameters.Add(new SqlParameter("@studentId", student.Id));
+                    cmd.ExecuteNonQuery();
+
+                }
+            }
+        }
+
         public List<Exercise> GetAllExercises()
         {
             using (SqlConnection conn = Connection)
@@ -60,6 +76,24 @@ namespace StudentExercise4Advanced.Data
         }
 
         //INSTRUCTORS 
+
+        public void AddInstructor(Instructor newInstructor)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"INSERT INTO Instructor (FirstName, LastName, SlackHandle, CohortId) VALUES (@firstName, @lastName, @slackHandle, @cohortId)";
+                    cmd.Parameters.Add(new SqlParameter("@firstName", newInstructor.FirstName));
+                    cmd.Parameters.Add(new SqlParameter("@lastName", newInstructor.LastName));
+                    cmd.Parameters.Add(new SqlParameter("@slackHandle", newInstructor.SlackHandle));
+                    cmd.Parameters.Add(new SqlParameter("@cohortId", newInstructor.CohortNumber.Id));
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
+        }
 
         public List<Instructor> GetAllInstructors()
         {
@@ -112,6 +146,134 @@ namespace StudentExercise4Advanced.Data
 
         //STUDENTS
 
+        public void FinallyAssignEx(int exercise, int student)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "INSERT INTO AssignedExercise (ExerciseId, StudentId) VALUES (@exerciseId, @studentId)";
+                    cmd.Parameters.Add(new SqlParameter("@exerciseId", exercise));
+                    cmd.Parameters.Add(new SqlParameter("@studentId", student));
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public List<Exercise> QueStudentExercises(int stuId)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT e.id AS ExerciseId, e.ExerciseName, e.ExerciseLanguage, s.Id AS StudentId FROM Exercise e LEFT JOIN AssignedExercise a ON a.ExerciseId = e.Id LEFT JOIN Student s ON s.id = a.StudentId WHERE s.id = @studentId";
+                    cmd.Parameters.Add(new SqlParameter("@studentId", stuId));
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    List<Exercise> exercises = new List<Exercise>();
+
+                    while (reader.Read())
+                    {
+
+                        int idColumnPosition = reader.GetOrdinal("ExerciseId");
+                        int exIdValue = reader.GetInt32(idColumnPosition);
+
+                        int exNameColumnPosition = reader.GetOrdinal("ExerciseName");
+                        string exNameValue = reader.GetString(exNameColumnPosition);
+
+                        int exLanguageNameColumnPosition = reader.GetOrdinal("ExerciseLanguage");
+                        string exLanguageNameValue = reader.GetString(exLanguageNameColumnPosition);
+
+                        Exercise exercise = new Exercise
+                        {
+                            Id = exIdValue,
+                            Name = exNameValue,
+                            CodeLanguage = exLanguageNameValue
+                        };
+
+                        exercises.Add(exercise);
+                    }
+                    reader.Close();
+                    return exercises;
+
+                }
+            }
+        }
+
+        public void ChangeStudentCohort(int stuId, int CoId)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"UPDATE Student SET CohortId = @newCohortId WHERE Id = @studentId";
+                    cmd.Parameters.Add(new SqlParameter("@newCohortId", CoId));
+                    cmd.Parameters.Add(new SqlParameter("@studentId", stuId));
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void AddStudent(Student newStudent)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"INSERT INTO Student (FirstName, LastName, SlackHandle, CohortId) VALUES (@firstName, @lastName, @slackHandle, @cohortId)";
+                    cmd.Parameters.Add(new SqlParameter("@firstName", newStudent.FirstName));
+                    cmd.Parameters.Add(new SqlParameter("@lastName", newStudent.LastName));
+                    cmd.Parameters.Add(new SqlParameter("@slackHandle", newStudent.SlackHandle));
+                    cmd.Parameters.Add(new SqlParameter("@cohortId", newStudent.CohortNumber.Id));
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
+        }
+
+        public List<Student> StudentByCohort(int userInput)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "SELECT FirstName, LastName, SlackHandle FROM Student WHERE CohortId = @id";
+                    cmd.Parameters.Add(new SqlParameter("@id", userInput));
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    List<Student> students = new List<Student>();
+
+                    while (reader.Read())
+                    {
+                        int stuFirstNameColumnPosition = reader.GetOrdinal("FirstName");
+                        string stuFirstNameValue = reader.GetString(stuFirstNameColumnPosition);
+
+                        int stuLastNameColumnPosition = reader.GetOrdinal("LastName");
+                        string stuLastNameValue = reader.GetString(stuLastNameColumnPosition);
+
+                        int stuSlackNameColumnPosition = reader.GetOrdinal("SlackHandle");
+                        string stuSlackNameValue = reader.GetString(stuSlackNameColumnPosition);
+
+                        Student student = new Student
+                        {
+                            FirstName = stuFirstNameValue,
+                            LastName = stuLastNameValue,
+                            SlackHandle = stuSlackNameValue
+                        };
+
+                        students.Add(student);
+                    }
+                    reader.Close();
+                    return students;
+                }
+            }
+        }
+
         public List<Student> StudentSearchByLast()
         {
             Console.WriteLine("What is the students last name?");
@@ -160,13 +322,16 @@ namespace StudentExercise4Advanced.Data
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT FirstName, LastName, SlackHandle FROM Student";
+                    cmd.CommandText = "SELECT Id, FirstName, LastName, SlackHandle FROM Student";
                     SqlDataReader reader = cmd.ExecuteReader();
 
                     List<Student> students = new List<Student>();
 
                     while (reader.Read())
                     {
+                        int idColumnPosition = reader.GetOrdinal("Id");
+                        int idValue = reader.GetInt32(idColumnPosition);
+
                         int firstNameColumnPosition = reader.GetOrdinal("FirstName");
                         string firstNameValue = reader.GetString(firstNameColumnPosition);
 
@@ -178,6 +343,7 @@ namespace StudentExercise4Advanced.Data
 
                         Student student = new Student
                         {
+                            Id = idValue,
                             FirstName = firstNameValue,
                             LastName = lastNameValue,
                             SlackHandle = slackHandleValue,
