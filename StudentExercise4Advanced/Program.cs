@@ -124,6 +124,29 @@ namespace StudentExercise4Advanced
                         Console.WriteLine("What is the slack handle for this new student?");
                         string newStudentSlackHandle= Console.ReadLine();
 
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        List<Cohort> cohortsToChoose = repository.GetallCohorts();
+                        Console.WriteLine($"Select Cohort by entering 1 - {cohortsToChoose.Count} ---------------------");
+                        int cohortOptionCounter = 0;
+                        foreach (Cohort cohort in cohortsToChoose)
+                        {
+                            ++cohortOptionCounter;
+                            Console.WriteLine($"{cohortOptionCounter}: {cohort.Name}");
+                        }
+
+                        int chosenCohort = Int32.Parse(Console.ReadLine());
+
+                        Student newStudentToBeAdded = new Student
+                        {
+                            FirstName = newStudentFirstName,
+                            LastName = newStudentLastName,
+                            SlackHandle = newStudentSlackHandle,
+                            CohortNumber = cohortsToChoose[--chosenCohort]
+                        };
+                        Console.WriteLine($"{newStudentToBeAdded.FirstName} is now in {cohortsToChoose[chosenCohort].Name}");
+
+
                         break;
                     default:
                         Console.WriteLine("Goodbye");

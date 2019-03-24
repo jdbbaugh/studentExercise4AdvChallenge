@@ -112,6 +112,24 @@ namespace StudentExercise4Advanced.Data
 
         //STUDENTS
 
+        public void AddStudent(Student newStudent)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"INSERT INTO Student (FirstName, LastName, SlackHandle, CohortId) VALUES (@firstName, @lastName, @slackHandle, @cohortId)";
+                    cmd.Parameters.Add(new SqlParameter("@firstName", newStudent.FirstName));
+                    cmd.Parameters.Add(new SqlParameter("@lastName", newStudent.LastName));
+                    cmd.Parameters.Add(new SqlParameter("@slackHandle", newStudent.SlackHandle));
+                    cmd.Parameters.Add(new SqlParameter("@cohortId", newStudent.CohortNumber.Id));
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
+        }
+
         public List<Student> StudentSearchByLast()
         {
             Console.WriteLine("What is the students last name?");
