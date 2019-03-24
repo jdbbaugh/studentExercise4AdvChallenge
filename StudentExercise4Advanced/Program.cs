@@ -24,7 +24,7 @@ namespace StudentExercise4Advanced
                 Console.WriteLine("6. Create New Cohort.");
                 Console.WriteLine("7. Create New Student.");
                 Console.WriteLine("8. Create New Instructor.");
-                Console.WriteLine("9. Display specific cohort students.");
+                Console.WriteLine("9. Display students by Cohort.");
                 Console.WriteLine("10. Move existing student to new cohort.");
                 Console.WriteLine("11. List specific students exercises.");
                 Console.WriteLine("11. Assign specific student specific exercise.");
@@ -238,6 +238,32 @@ namespace StudentExercise4Advanced
                         Console.WriteLine();
                         Console.WriteLine();
                         Console.WriteLine($"{chooseAStudent[--theeChosenStudent].FirstName} has been moved to {chooseANewCohort[--theeChosenNewCohort].Name}");
+                        break;
+                    case "11":
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        Console.WriteLine("Choose a Student to see their exercises");
+                        List<Student> chooseAStudentForEX = repository.GetAllStudentsBasic();
+                        Console.WriteLine($"Select student by entering 1 - {chooseAStudentForEX.Count} ");
+                        int chooseAStudentForExCounter = 0;
+                        foreach (Student student in chooseAStudentForEX)
+                        {
+                            ++chooseAStudentForExCounter;
+                            Console.WriteLine($"{chooseAStudentForExCounter}: {student.FirstName} {student.LastName}");
+                        }
+                        int theeChosenStudentForEx = Int32.Parse(Console.ReadLine());
+
+                       List<Exercise> chosenStudentsExercises = repository.QueStudentExercises(theeChosenStudentForEx);
+                        int chosenStuExCounter = 0;
+                        Console.WriteLine($"{chooseAStudentForEX[--theeChosenStudentForEx].FirstName} is currently working on:");
+                        foreach (Exercise ex in chosenStudentsExercises)
+                        {
+                            ++chosenStuExCounter;
+                            Console.WriteLine($"{chosenStuExCounter}: {ex.Name} ");
+                        }
+
+                        Console.WriteLine();
+                        Console.WriteLine();
                         break;
                     default:
                         Console.WriteLine("Goodbye");

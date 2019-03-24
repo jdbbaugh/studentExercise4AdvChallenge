@@ -130,6 +130,42 @@ namespace StudentExercise4Advanced.Data
 
         //STUDENTS
 
+        public List<Exercise> QueStudentExercises(int stuId)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT e.id AS ExerciseId, e.ExerciseName, e.ExerciseLanguage, s.Id AS StudentId FROM Exercise e LEFT JOIN AssignedExercise a ON a.ExerciseId = e.Id LEFT JOIN Student s ON s.id = a.StudentId WHERE s.id = @studentId";
+                    cmd.Parameters.Add(new SqlParameter("@studentId", stuId));
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    List<Exercise> exercises = new List<Exercise>();
+
+                    while (reader.Read())
+                    {
+                        int exNameColumnPosition = reader.GetOrdinal("ExerciseName");
+                        string exNameValue = reader.GetString(exNameColumnPosition);
+
+                        int exLanguageNameColumnPosition = reader.GetOrdinal("ExerciseLanguage");
+                        string exLanguageNameValue = reader.GetString(exLanguageNameColumnPosition);
+
+                        Exercise exercise = new Exercise
+                        {
+                            Name = exNameValue,
+                            CodeLanguage = exLanguageNameValue
+                        };
+
+                        exercises.Add(exercise);
+                    }
+                    reader.Close();
+                    return exercises;
+
+                }
+            }
+        }
+
         public void ChangeStudentCohort(int stuId, int CoId)
         {
             using (SqlConnection conn = Connection)
